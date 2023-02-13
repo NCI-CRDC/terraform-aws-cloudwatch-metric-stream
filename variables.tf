@@ -14,6 +14,7 @@ variable "env" {
     error_message = "valid values are 'dev', 'qa', 'stage', 'prod', and 'nonprod'"
   }
 }
+
 variable "program" {
   type        = string
   description = "the program associated with the application"
@@ -23,4 +24,31 @@ variable "program" {
     condition     = contains(["crdc", "ccdi", "ctos"], var.program)
     error_message = "valid values for program are 'crdc', 'ccdi', and 'ctos'"
   }
+}
+
+variable "firehose_arn" {
+  type        = string
+  description = "arn of the kinesis firehose delivery stream to use for the metric stream"
+}
+
+variable "include_filter" {
+  type        = set(string)
+  description = "Specify the service namespaces to include in metric stream in a list"
+  default     = ["AWS/ES", "AWS/ApplicationELB", "AWS/ECS"]
+}
+
+variable "output_format" {
+  type        = string
+  description = "output format of the metric stream data - either 'json' or 'opentelemetry0.7'"
+  default     = "opentelemetry0.7"
+}
+
+variable "resource_suffix" {
+  type        = string
+  description = "a suffix to append to the resource name after the stack name"
+}
+
+variable "role_arn" {
+  type        = string
+  description = "arn of the role for cloudwatch metric stream to assume"
 }
